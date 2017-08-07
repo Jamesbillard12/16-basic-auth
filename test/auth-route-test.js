@@ -69,4 +69,17 @@ describe('Auth Routes', function() {
       });
     });
   });
+
+  describe('GET: /api/sign', function() {
+    describe('with a valid body but invalid path', function() {
+      it('should return status 404', done => {
+        request.get(`${url}/api/sign`)
+        .auth('exampleuser', '1234')
+        .end((err, res) => {
+          expect(res.status).to.equal(404);
+          done();
+        });
+      });
+    });
+  });
 });
