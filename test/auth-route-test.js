@@ -100,8 +100,25 @@ describe('Auth Routes', function() {
       });
     });
   });
-  describe('without a username', function() {
-    it('should return status 401', done => {
+  describe('cannot be authenticated', function() {
+    beforeEach( done => {
+      let user = new User(exampleUser);
+
+      user.generatePasswordHash(exampleUser.password)
+      .then( user => user.save())
+      .then( user => {
+        this.tempUser = user;
+        done();
+      })
+      .catch(done);
+    });
+
+    afterEach( done => {
+      User.remove({})
+      .then( () => done())
+      .catch(done);
+    });
+    it('should return status 401 with no username', done => {
       request.get(`${url}/api/signin`)
       .auth('', '1234')
       .end((err, res) => {
@@ -109,13 +126,27 @@ describe('Auth Routes', function() {
         done();
       });
     });
-  });
-  describe('without a password', function() {
-    it('should return status 401', done => {
+    it('should return status 401 with no password', done => {
       request.get(`${url}/api/signin`)
       .auth('exampleuser', '')
       .end((err, res) => {
         expect(res.status).to.equal(401);
+        done();
+      });
+    });
+    it('msg should return invalid password', done => {
+      request.get(`${url}/api/signin`)
+      .auth('exampleuser', 'ABCDE')
+      .end((err, res) => {
+        expect(res.status).equal(401);
+        done();
+      });
+    });
+    it('msg should return invalid username', done => {
+      request.get(`${url}/api/signin`)
+      .auth('dog', '1234')
+      .end((err, res) => {
+        expect(res.status).equal(401);
         done();
       });
     });
