@@ -29,7 +29,7 @@ authRouter.get('/api/signin', basicAuth, function(req, res, next) {
   User.findOne({username: req.auth.username})
   .then( user => {
     if(!user){
-      return Promise.reject(createError(401, 'user not found'));
+      return Promise.reject(createError(401, 'invalid username'));
     }
     return user.comparePasswordHash(req.auth.password);
   })
