@@ -38,6 +38,24 @@ describe('Auth Routes', function() {
       });
     });
   });
+  describe('POST: /api/signup', function() {
+    describe('with a valid body', function() {
+      after( done => {
+        User.remove({})
+        .then( () => done())
+        .catch(done);
+      });
+
+      it('should return status 400', done => {
+        request.post(`${url}/api/signup`)
+        .send()
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          done();
+        });
+      });
+    });
+  });
 
   describe('GET: /api/signin', function() {
     describe('with a valid body', function() {
@@ -79,6 +97,26 @@ describe('Auth Routes', function() {
           expect(res.status).to.equal(404);
           done();
         });
+      });
+    });
+  });
+  describe('without a username', function() {
+    it('should return status 401', done => {
+      request.get(`${url}/api/signin`)
+      .auth('', '1234')
+      .end((err, res) => {
+        expect(res.status).to.equal(401);
+        done();
+      });
+    });
+  });
+  describe('without a password', function() {
+    it('should return status 401', done => {
+      request.get(`${url}/api/signin`)
+      .auth('exampleuser', '')
+      .end((err, res) => {
+        expect(res.status).to.equal(401);
+        done();
       });
     });
   });
