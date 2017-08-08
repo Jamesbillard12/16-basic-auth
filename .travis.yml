@@ -1,0 +1,11 @@
+language: node_js
+os:
+  -osx
+sudo: false
+node_js:
+  -"6"
+  - "iojs"
+install:
+  - npm install
+script:
+  - npm test
