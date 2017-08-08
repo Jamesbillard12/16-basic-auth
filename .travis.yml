@@ -4,6 +4,8 @@ os:
 sudo: false
 node_js:
   - "node"
+services:
+  - mongodb
 install:
   - npm install
 before_script:
