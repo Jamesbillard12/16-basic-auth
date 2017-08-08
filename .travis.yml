@@ -3,6 +3,7 @@ os:
   -osx
 sudo: false
 node_js:
+  -"6.11.1"
   - "iojs"
 install:
   - npm install
